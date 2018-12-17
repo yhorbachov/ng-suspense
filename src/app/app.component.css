@@ -1,0 +1,14 @@
+.content {
+  max-width: 1240px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+pre {
+  border: 1px solid #ebebeb;
+  padding: 16px;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0.1);
+}
