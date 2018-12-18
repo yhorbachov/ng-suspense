@@ -1,27 +1,50 @@
-import { Directive, Inject, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, Inject, TemplateRef, ViewContainerRef, Input, OnInit } from '@angular/core';
 import { SuspenseDirective } from './suspense.directive';
 import { destroyed } from '../utils';
-import { takeUntil, map, distinctUntilChanged } from 'rxjs/operators';
+import { takeUntil, map, distinctUntilChanged, switchMap, delay } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Directive({
   selector: '[ngSuspensePlaceholder]'
 })
-export class SuspensePlaceholderDirective {
+export class SuspensePlaceholderDirective implements OnInit {
+  @Input()
+  set ngSuspensePlaceholder(delay: number) {
+    this._delay = delay;
+  }
+
+  @Input()
+  set ngSuspensePlaceholderTemplate(template: TemplateRef<any>) {
+    this._customTemplate = template;
+  }
+
+  private _delay = 0;
+  private _customTemplate: TemplateRef<any> | null = null;
+
   constructor(
-    @Inject(SuspenseDirective) suspense: SuspenseDirective,
-    template: TemplateRef<any>,
-    viewContainerRef: ViewContainerRef
-  ) {
-    suspense.state$
+    @Inject(SuspenseDirective) private suspense: SuspenseDirective,
+    private template: TemplateRef<any>,
+    private viewContainerRef: ViewContainerRef
+  ) {}
+
+  ngOnInit() {
+    this.suspense.state$
       .pipe(
         takeUntil(destroyed(this)),
         map(state => state.loading),
+        switchMap(isLoading => {
+          if (isLoading) {
+            return of(true).pipe(delay(this._delay));
+          } else {
+            return of(false);
+          }
+        }),
         distinctUntilChanged()
       )
       .subscribe(loading => {
-        viewContainerRef.clear();
+        this.viewContainerRef.clear();
         if (loading) {
-          viewContainerRef.createEmbeddedView(template);
+          this.viewContainerRef.createEmbeddedView(this._customTemplate || this.template);
         }
       });
   }

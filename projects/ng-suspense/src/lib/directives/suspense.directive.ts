@@ -1,5 +1,5 @@
-import { Directive, Input, OnDestroy } from '@angular/core';
-import { Observable, Subject, Subscription, from } from 'rxjs';
+import { Directive, Input, OnDestroy, TemplateRef } from '@angular/core';
+import { Observable, Subscription, from, BehaviorSubject } from 'rxjs';
 
 interface SuspenseState {
   loading?: boolean;
@@ -17,7 +17,14 @@ export class SuspenseDirective implements OnDestroy {
     this.subscribeTo(value);
   }
 
-  state$: Subject<SuspenseState> = new Subject();
+  @Input()
+  set ngSuspenseTemplate(template: TemplateRef<any> | null) {
+    console.log('Template: ', template);
+  }
+
+  state$: BehaviorSubject<SuspenseState> = new BehaviorSubject({
+    loaded: false
+  });
 
   private subscription: Subscription | null = null;
 

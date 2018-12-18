@@ -1,8 +1,14 @@
+import { TestBed } from '@angular/core/testing';
 import { SuspenseErrorDirective } from './suspense-error.directive';
+import { SuspenseDirective } from './suspense.directive';
 
 describe('SuspenseErrorDirective', () => {
-  it('should create an instance', () => {
-    const directive = new SuspenseErrorDirective();
-    expect(directive).toBeTruthy();
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [SuspenseErrorDirective],
+      providers: []
+    });
   });
+
+  it('should create an instance', () => {});
 });

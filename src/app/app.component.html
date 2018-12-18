@@ -3,7 +3,15 @@
   <mat-card fxFlex="100">
     <mat-card-title>Control panel</mat-card-title>
     <mat-card-content fxLayout="row">
-      <div fxFlex="50"></div>
+      <div fxFlex="50">
+        <h3 class="mat-h3">Actions</h3>
+        <button mat-button color="primary" (click)="next(0)">Next: 0</button>
+        <button mat-button color="primary" (click)="next(undefined)">Next: undefined</button>
+        <button mat-button color="primary" (click)="next(true)">Next: true</button>
+        <button mat-button color="primary" (click)="next(false)">Next: false</button>
+        <button mat-button color="primary" (click)="error()">Error</button>
+        <button mat-button color="primary" (click)="reset()">Reset</button>
+      </div>
       <div fxFlex="50">
         <h3 class="mat-h3">data$ value:</h3>
         <pre>{{ data$ | async }}</pre>
@@ -13,22 +21,16 @@
 
   <div fxLayout="row" fxLayoutGap="16px">
     <mat-card fxFlex="50">
-      <mat-card-title>NgSuspense</mat-card-title>
+      <mat-card-title>NgSuspense Directive</mat-card-title>
       <mat-card-content>
         <ng-container [ngSuspense]="data$">
-          <ng-container *ngSuspenseError>Error</ng-container>
-          <ng-container *ngSuspensePlaceholder>Loading...</ng-container>
+          <ng-container *ngSuspenseError="let error">Error: {{ error }}</ng-container>
+          <ng-container *ngSuspensePlaceholder="1000">Loading...</ng-container>
           <ng-container *ngSuspenseSuccess="let data">
             <div>Data: {{ data }}</div>
           </ng-container>
         </ng-container>
       </mat-card-content>
-      <mat-card-actions>
-        <button mat-button color="primary" (click)="next(0)">Next: true</button>
-        <button mat-button color="primary" (click)="next(false)">Next: false</button>
-        <button mat-button color="primary" (click)="error()">Error</button>
-        <button mat-button color="primary" (click)="reset()">Reset</button>
-      </mat-card-actions>
     </mat-card>
     <!-- NgIf -->
     <mat-card fxFlex="50">
@@ -40,6 +42,13 @@
 
         <ng-template #loadingTpl>Loading...</ng-template>
       </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="16px">
+    <mat-card>
+      <mat-card-title>NgSuspense Component</mat-card-title>
+      <mat-card-content> </mat-card-content>
     </mat-card>
   </div>
 </div>
