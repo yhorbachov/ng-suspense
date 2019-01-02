@@ -4,6 +4,9 @@ import { destroyed } from '../utils';
 import { takeUntil, map, distinctUntilChanged, switchMap, delay } from 'rxjs/operators';
 import { of } from 'rxjs';
 
+/**
+ * TODO: Add documentation
+ */
 @Directive({
   selector: '[ngSuspensePlaceholder]'
 })
@@ -19,7 +22,6 @@ export class SuspensePlaceholderDirective implements OnInit {
 
   @Input('ngSuspensePlaceholderDelay')
   set ngSuspensePlaceholderDelay(delayMs: number) {
-    console.log('DELAY: ', delayMs);
     this._delay = delayMs;
   }
 
@@ -33,8 +35,8 @@ export class SuspensePlaceholderDirective implements OnInit {
 
   constructor(
     @Inject(SuspenseDirective) private suspense: SuspenseDirective,
-    private template: TemplateRef<any>,
-    private viewContainerRef: ViewContainerRef
+    private _template: TemplateRef<any>,
+    private _viewContainerRef: ViewContainerRef
   ) {}
 
   ngOnInit() {
@@ -52,10 +54,14 @@ export class SuspensePlaceholderDirective implements OnInit {
         distinctUntilChanged()
       )
       .subscribe(loading => {
-        this.viewContainerRef.clear();
-        if (loading) {
-          this.viewContainerRef.createEmbeddedView(this._customTemplate || this.template);
-        }
+        this._render(loading);
       });
+  }
+
+  private _render(loading: boolean) {
+    this._viewContainerRef.clear();
+    if (loading) {
+      this._viewContainerRef.createEmbeddedView(this._customTemplate || this._template);
+    }
   }
 }

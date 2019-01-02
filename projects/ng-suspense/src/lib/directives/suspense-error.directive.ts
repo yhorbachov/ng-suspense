@@ -3,6 +3,9 @@ import { SuspenseDirective } from './suspense.directive';
 import { destroyed } from '../utils';
 import { takeUntil, map, distinctUntilChanged } from 'rxjs/operators';
 
+/**
+ * TODO: Add documentation
+ */
 @Directive({
   selector: '[ngSuspenseError]'
 })
@@ -16,8 +19,8 @@ export class SuspenseErrorDirective implements OnInit {
 
   constructor(
     @Inject(SuspenseDirective) private suspense: SuspenseDirective,
-    private template: TemplateRef<any>,
-    private viewContainerRef: ViewContainerRef
+    private _template: TemplateRef<any>,
+    private _viewContainerRef: ViewContainerRef
   ) {}
 
   ngOnInit() {
@@ -27,13 +30,15 @@ export class SuspenseErrorDirective implements OnInit {
         map(state => state.error),
         distinctUntilChanged()
       )
-      .subscribe(error => {
-        this.viewContainerRef.clear();
-        if (error) {
-          this.viewContainerRef.createEmbeddedView(this._customTemplate || this.template, {
-            $implicit: error
-          });
-        }
+      .subscribe(error => this._render(error));
+  }
+
+  private _render(error: any) {
+    this._viewContainerRef.clear();
+    if (error) {
+      this._viewContainerRef.createEmbeddedView(this._customTemplate || this._template, {
+        $implicit: error
       });
+    }
   }
 }

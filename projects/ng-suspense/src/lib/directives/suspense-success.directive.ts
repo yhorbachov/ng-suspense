@@ -1,8 +1,11 @@
 import { Directive, Inject, TemplateRef, ViewContainerRef, Input } from '@angular/core';
-import { SuspenseDirective } from './suspense.directive';
+import { SuspenseDirective, SuspenseState } from './suspense.directive';
 import { destroyed } from '../utils';
 import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
 
+/**
+ * TODO: Add documentation
+ */
 @Directive({
   selector: '[ngSuspenseSuccess]'
 })
@@ -16,21 +19,23 @@ export class SuspenseSuccessDirective {
 
   constructor(
     @Inject(SuspenseDirective) suspense: SuspenseDirective,
-    template: TemplateRef<any>,
-    viewContainerRef: ViewContainerRef
+    private _template: TemplateRef<any>,
+    private _viewContainerRef: ViewContainerRef
   ) {
     suspense.state$
       .pipe(
         takeUntil(destroyed(this)),
         distinctUntilChanged()
       )
-      .subscribe(state => {
-        viewContainerRef.clear();
-        if (state.loaded && !state.error) {
-          viewContainerRef.createEmbeddedView(this._customTemplate || template, {
-            $implicit: state.data
-          });
-        }
+      .subscribe(state => this._render(state));
+  }
+
+  private _render(suspenseState: SuspenseState) {
+    this._viewContainerRef.clear();
+    if (suspenseState.loaded && !suspenseState.error) {
+      this._viewContainerRef.createEmbeddedView(this._customTemplate || this._template, {
+        $implicit: suspenseState.data
       });
+    }
   }
 }

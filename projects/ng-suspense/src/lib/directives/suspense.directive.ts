@@ -1,13 +1,16 @@
 import { Directive, Input, OnDestroy } from '@angular/core';
 import { Observable, Subscription, from, BehaviorSubject } from 'rxjs';
 
-interface SuspenseState {
+export interface SuspenseState {
   loading?: boolean;
   error?: any;
   data?: any;
   loaded: boolean;
 }
 
+/**
+ * TODO: Add documentation
+ */
 @Directive({
   selector: '[ngSuspense]'
 })
