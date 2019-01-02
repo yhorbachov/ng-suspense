@@ -7,9 +7,8 @@ import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
   selector: '[ngSuspenseSuccess]'
 })
 export class SuspenseSuccessDirective {
-  @Input()
+  @Input('ngSuspenseSuccess')
   set ngSuspenseSuccess(template: TemplateRef<any>) {
-    console.log('Template: ', template);
     this._customTemplate = template;
   }
 

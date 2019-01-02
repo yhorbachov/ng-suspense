@@ -13,35 +13,40 @@ interface SuspenseState {
 })
 export class SuspenseDirective implements OnDestroy {
   @Input('ngSuspense')
-  set ngSuspense(value: Observable<any> | Promise<any>) {
-    this.subscribe(value);
+  set ngSuspense(obj: Observable<any> | Promise<any>) {
+    if (obj !== this._obj) {
+      this._subscribe(obj);
+    }
   }
 
   state$: BehaviorSubject<SuspenseState> = new BehaviorSubject({
     loaded: false
   });
 
-  private subscription: Subscription | null = null;
+  private _obj: Observable<any> | Promise<any> | null = null;
+  private _subscription: Subscription | null = null;
 
   ngOnDestroy() {
-    this.unsubscribe();
+    this._unsubscribe();
   }
 
-  private unsubscribe() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+  private _unsubscribe() {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
     }
   }
 
-  private subscribe(value$: Observable<any> | Promise<any>) {
-    this.unsubscribe();
+  private _subscribe(obj: Observable<any> | Promise<any>) {
+    this._unsubscribe();
+
+    this._obj = obj;
 
     this.state$.next({
       loading: true,
       loaded: false
     });
 
-    this.subscription = from(value$).subscribe(
+    this._subscription = from(obj).subscribe(
       data => {
         this.state$.next({
           data,

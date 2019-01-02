@@ -9,8 +9,18 @@ import { of } from 'rxjs';
 })
 export class SuspensePlaceholderDirective implements OnInit {
   @Input()
-  set ngSuspensePlaceholder(delay: number) {
-    this._delay = delay;
+  set ngSuspensePlaceholder(delayOrTemplate: number | TemplateRef<any>) {
+    if (typeof delayOrTemplate === 'number') {
+      this._delay = delayOrTemplate;
+    } else {
+      this._customTemplate = delayOrTemplate || null;
+    }
+  }
+
+  @Input('ngSuspensePlaceholderDelay')
+  set ngSuspensePlaceholderDelay(delayMs: number) {
+    console.log('DELAY: ', delayMs);
+    this._delay = delayMs;
   }
 
   @Input()
