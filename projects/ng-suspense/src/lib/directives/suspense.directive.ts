@@ -1,4 +1,4 @@
-import { Directive, Input, OnDestroy, TemplateRef } from '@angular/core';
+import { Directive, Input, OnDestroy } from '@angular/core';
 import { Observable, Subscription, from, BehaviorSubject } from 'rxjs';
 
 interface SuspenseState {
@@ -12,14 +12,9 @@ interface SuspenseState {
   selector: '[ngSuspense]'
 })
 export class SuspenseDirective implements OnDestroy {
-  @Input()
-  set ngSuspense(value: Observable<any>) {
-    this.subscribeTo(value);
-  }
-
-  @Input()
-  set ngSuspenseTemplate(template: TemplateRef<any> | null) {
-    console.log('Template: ', template);
+  @Input('ngSuspense')
+  set ngSuspense(value: Observable<any> | Promise<any>) {
+    this.subscribe(value);
   }
 
   state$: BehaviorSubject<SuspenseState> = new BehaviorSubject({
@@ -27,8 +22,6 @@ export class SuspenseDirective implements OnDestroy {
   });
 
   private subscription: Subscription | null = null;
-
-  constructor() {}
 
   ngOnDestroy() {
     this.unsubscribe();
@@ -40,7 +33,7 @@ export class SuspenseDirective implements OnDestroy {
     }
   }
 
-  private subscribeTo(value$: Observable<any>) {
+  private subscribe(value$: Observable<any> | Promise<any>) {
     this.unsubscribe();
 
     this.state$.next({

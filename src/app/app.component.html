@@ -36,7 +36,7 @@
     <mat-card fxFlex="50">
       <mat-card-title>NgIf + async </mat-card-title>
       <mat-card-content>
-        <ng-container *ngIf="(data$ | async) as data; else: loadingTpl">
+        <ng-container *ngIf="(data$ | async) as data; else loadingTpl">
           <div>Data: {{ data }}</div>
         </ng-container>
 

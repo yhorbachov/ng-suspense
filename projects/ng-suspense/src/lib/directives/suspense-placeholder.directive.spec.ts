@@ -1,8 +1,10 @@
+import { TestBed } from '@angular/core/testing';
 import { SuspensePlaceholderDirective } from './suspense-placeholder.directive';
 
 describe('SuspensePlaceholderDirective', () => {
-  it('should create an instance', () => {
-    const directive = new SuspensePlaceholderDirective();
-    expect(directive).toBeTruthy();
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [SuspensePlaceholderDirective]
+    });
   });
 });
