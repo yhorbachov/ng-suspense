@@ -1,4 +1,12 @@
-import { Directive, Inject, TemplateRef, ViewContainerRef, OnInit, Input } from '@angular/core';
+import {
+  Directive,
+  Inject,
+  TemplateRef,
+  ViewContainerRef,
+  OnInit,
+  Input,
+  ChangeDetectorRef
+} from '@angular/core';
 import { SuspenseDirective } from './suspense.directive';
 import { destroyed } from '../utils';
 import { takeUntil, map, distinctUntilChanged } from 'rxjs/operators';
@@ -20,7 +28,8 @@ export class SuspenseErrorDirective implements OnInit {
   constructor(
     @Inject(SuspenseDirective) private suspense: SuspenseDirective,
     private _template: TemplateRef<any>,
-    private _viewContainerRef: ViewContainerRef
+    private _viewContainerRef: ViewContainerRef,
+    private _changeDetectionRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -39,6 +48,7 @@ export class SuspenseErrorDirective implements OnInit {
       this._viewContainerRef.createEmbeddedView(this._customTemplate || this._template, {
         $implicit: error
       });
+      this._changeDetectionRef.markForCheck();
     }
   }
 }

@@ -1,4 +1,12 @@
-import { Directive, Inject, TemplateRef, ViewContainerRef, Input, OnInit } from '@angular/core';
+import {
+  Directive,
+  Inject,
+  TemplateRef,
+  ViewContainerRef,
+  Input,
+  OnInit,
+  ChangeDetectorRef
+} from '@angular/core';
 import { SuspenseDirective } from './suspense.directive';
 import { destroyed } from '../utils';
 import { takeUntil, map, distinctUntilChanged, switchMap, delay } from 'rxjs/operators';
@@ -36,7 +44,8 @@ export class SuspensePlaceholderDirective implements OnInit {
   constructor(
     @Inject(SuspenseDirective) private suspense: SuspenseDirective,
     private _template: TemplateRef<any>,
-    private _viewContainerRef: ViewContainerRef
+    private _viewContainerRef: ViewContainerRef,
+    private _changeDetectionRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -62,6 +71,7 @@ export class SuspensePlaceholderDirective implements OnInit {
     this._viewContainerRef.clear();
     if (loading) {
       this._viewContainerRef.createEmbeddedView(this._customTemplate || this._template);
+      this._changeDetectionRef.markForCheck();
     }
   }
 }

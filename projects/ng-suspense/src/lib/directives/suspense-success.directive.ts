@@ -1,4 +1,11 @@
-import { Directive, Inject, TemplateRef, ViewContainerRef, Input } from '@angular/core';
+import {
+  Directive,
+  Inject,
+  TemplateRef,
+  ViewContainerRef,
+  Input,
+  ChangeDetectorRef
+} from '@angular/core';
 import { SuspenseDirective, SuspenseState } from './suspense.directive';
 import { destroyed } from '../utils';
 import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
@@ -20,7 +27,8 @@ export class SuspenseSuccessDirective {
   constructor(
     @Inject(SuspenseDirective) suspense: SuspenseDirective,
     private _template: TemplateRef<any>,
-    private _viewContainerRef: ViewContainerRef
+    private _viewContainerRef: ViewContainerRef,
+    private _changeDetectionRef: ChangeDetectorRef
   ) {
     suspense.state$
       .pipe(
@@ -36,6 +44,7 @@ export class SuspenseSuccessDirective {
       this._viewContainerRef.createEmbeddedView(this._customTemplate || this._template, {
         $implicit: suspenseState.data
       });
+      this._changeDetectionRef.markForCheck();
     }
   }
 }
