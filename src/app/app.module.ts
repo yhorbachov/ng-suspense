@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule, MatCardModule, MatToolbarModule } from '@angular/material';
 
-import { NgSuspenseModule } from '../../projects/ng-suspense/src/lib';
+import { NgSuspenseModule } from '../../projects/ng-suspense/src/public_api';
+// import { NgSuspenseModule } from 'ng-suspense';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
