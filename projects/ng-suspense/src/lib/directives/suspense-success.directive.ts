@@ -4,11 +4,16 @@ import {
   TemplateRef,
   ViewContainerRef,
   Input,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  EmbeddedViewRef
 } from '@angular/core';
 import { SuspenseDirective, SuspenseState } from './suspense.directive';
 import { destroyed } from '../utils';
 import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
+
+class SuspenseSuccessContext {
+  $implicit: any = null;
+}
 
 /**
  * TODO: Add documentation
@@ -23,6 +28,8 @@ export class SuspenseSuccessDirective {
   }
 
   private _customTemplate: TemplateRef<any> | null = null;
+  private readonly _context = new SuspenseSuccessContext();
+  private _viewRef: EmbeddedViewRef<any> | null = null;
 
   constructor(
     @Inject(SuspenseDirective) suspense: SuspenseDirective,
@@ -39,12 +46,17 @@ export class SuspenseSuccessDirective {
   }
 
   private _render(suspenseState: SuspenseState) {
-    this._viewContainerRef.clear();
     if (suspenseState.loaded && !suspenseState.error) {
-      this._viewContainerRef.createEmbeddedView(this._customTemplate || this._template, {
-        $implicit: suspenseState.data
-      });
+      this._context.$implicit = suspenseState.data;
+      if (!this._viewRef) {
+        this._viewRef = this._viewContainerRef.createEmbeddedView(
+          this._customTemplate || this._template,
+          this._context
+        );
+      }
       this._changeDetectionRef.markForCheck();
+    } else {
+      this._viewContainerRef.clear();
     }
   }
 }
