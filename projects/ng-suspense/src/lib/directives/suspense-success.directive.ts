@@ -57,6 +57,7 @@ export class SuspenseSuccessDirective {
       this._changeDetectionRef.markForCheck();
     } else {
       this._viewContainerRef.clear();
+      this._viewRef = null;
     }
   }
 }
