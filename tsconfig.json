@@ -19,5 +19,9 @@
       "ng-suspense/*": ["dist/ng-suspense/*"],
       "@suspense": ["projects/ng-suspense/src/lib"]
     }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictTemplates": true
   }
 }

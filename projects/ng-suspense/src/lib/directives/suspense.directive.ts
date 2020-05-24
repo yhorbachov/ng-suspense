@@ -12,7 +12,7 @@ export interface SuspenseState {
  * TODO: Add documentation
  */
 @Directive({
-  selector: '[ngSuspense]'
+  selector: '[ngSuspense]',
 })
 export class SuspenseDirective implements OnDestroy {
   @Input('ngSuspense')
@@ -22,8 +22,8 @@ export class SuspenseDirective implements OnDestroy {
     }
   }
 
-  state$: BehaviorSubject<SuspenseState> = new BehaviorSubject({
-    loaded: false
+  state$: BehaviorSubject<SuspenseState> = new BehaviorSubject<SuspenseState>({
+    loaded: false,
   });
 
   private _obj: Observable<any> | Promise<any> | null = null;
@@ -46,17 +46,17 @@ export class SuspenseDirective implements OnDestroy {
 
     this.state$.next({
       loading: true,
-      loaded: false
+      loaded: false,
     });
 
     this._subscription = from(obj).subscribe(
-      data => {
+      (data) => {
         this.state$.next({
           data,
-          loaded: true
+          loaded: true,
         });
       },
-      error => {
+      (error) => {
         this.state$.next({ error, loaded: true });
       }
     );

@@ -26,7 +26,7 @@
         <ng-container [ngSuspense]="data$">
           <ng-container *ngSuspenseError="let error">Error: {{ error }}</ng-container>
           <ng-container *ngSuspensePlaceholder="1000">Loading...</ng-container>
-          <ng-container *ngSuspenseSuccess="let data">
+          <ng-container *ngSuspenseSuccess="let data;">
             <div>Data: {{ data }}</div>
           </ng-container>
         </ng-container>
@@ -42,13 +42,6 @@
 
         <ng-template #loadingTpl>Loading...</ng-template>
       </mat-card-content>
-    </mat-card>
-  </div>
-
-  <div fxLayout="row" fxLayoutGap="16px">
-    <mat-card>
-      <mat-card-title>NgSuspense Component</mat-card-title>
-      <mat-card-content> </mat-card-content>
     </mat-card>
   </div>
 </div>
